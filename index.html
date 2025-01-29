@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feed Page Redesign</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            transition: background-color 0.3s ease;
+        }
+        .container {
+            width: 90%;
+            margin: 20px auto;
+        }
+        .tabs {
+            display: flex;
+            border-bottom: 2px solid #ddd;
+            margin-bottom: 20px;
+            transition: border-color 0.3s ease;
+        }
+        .tabs div {
+            padding: 10px 20px;
+            cursor: pointer;
+            position: relative;
+            transition: color 0.3s ease, font-weight 0.3s ease;
+        }
+        .tabs div.active {
+            font-weight: bold;
+            color: #000;
+        }
+        .tabs div::before {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background-color: #000;
+            transform: scaleX(0);
+            transform-origin: bottom right;
+            transition: transform 0.3s ease;
+        }
+        .tabs div.active::before {
+            transform: scaleX(1);
+            transform-origin: bottom left;
+        }
+        .feed {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            opacity: 0;
+            animation: fadeIn 1s forwards;
+        }
+        .post {
+            background: #fff;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            transform: translateY(20px);
+            animation: slideUp 0.5s forwards;
+        }
+        .post .header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+        .post .content {
+            font-size: 16px;
+            margin-bottom: 15px;
+            color: #555;
+        }
+        .post .actions {
+            display: flex;
+            gap: 15px;
+        }
+        .post .actions button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #007bff;
+            font-size: 14px;
+            transition: color 0.3s ease;
+        }
+        .post .actions button:hover {
+            color: #0056b3;
+        }
+        .post .comments {
+            margin-top: 15px;
+        }
+        .comment {
+            background: #f1f1f1;
+            border-radius: 8px;
+            padding: 10px;
+            margin-bottom: 10px;
+            position: relative;
+        }
+        .comment input {
+            width: 100%;
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            margin-top: 5px;
+        }
+        .tabs div:hover::before {
+            transform: scaleX(1);
+            transform-origin: bottom left;
+        }
+        @keyframes slideUp {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+        @media (max-width: 768px) {
+            .tabs {
+                flex-direction: column;
+                align-items: center;
+            }
+            .tabs div {
+                padding: 10px;
+                text-align: center;
+                width: 100%;
+            }
+        }
+        .active-button {
+            background-color: #007bff;
+            color: #fff;
+            border-radius: 4px;
+            padding: 8px 16px;
+            transition: background-color 0.3s ease;
+        }
+        .active-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="tabs">
+        <div class="tab-item active" onclick="filterFeed('all')">All</div>
+        <div class="tab-item" onclick="filterFeed('global')">Global</div>
+        <div class="tab-item" onclick="filterFeed('following')">Following</div>
+        <div class="tab-item" onclick="filterFeed('myPosts')">My Posts</div>
+        <div class="tab-item" onclick="filterFeed('mentioned')">Mentioned</div>
+    </div>
+    <div class="feed">
+        <div class="post" id="post-1">
+            <div class="header">
+                <span>User Name</span>
+                <span>1 hour ago</span>
+            </div>
+            <div class="content">
+                This is an example of a post in the feed. Let's discuss new trends in the NFT space!
+            </div>
+            <div class="actions">
+                <button class="active-button" onclick="likePost()">Like</button>
+                <button class="active-button" onclick="commentPost()">Comment</button>
+                <button class="active-button" onclick="sharePost()">Share</button>
+            </div>
+            <div class="comments">
+                <div class="comment">
+                    <strong>Jane Doe:</strong> Great post! Excited about the future of NFTs.
+                    <input type="text" placeholder="Add a comment...">
+                </div>
+            </div>
+        </div>
+        <div class="post" id="post-2">
+            <div class="header">
+                <span>John Smith</span>
+                <span>2 hours ago</span>
+            </div>
+            <div class="content">
+                Here’s a new update about the NFT market! Let’s keep an eye on how it evolves.
+            </div>
+            <div class="actions">
+                <button class="active-button" onclick="likePost()">Like</button>
+                <button class="active-button" onclick="commentPost()">Comment</button>
+                <button class="active-button" onclick="sharePost()">Share</button>
+            </div>
+            <div class="comments">
+                <div class="comment">
+                    <strong>Tommy Lee:</strong> Thanks for sharing! More people need to know about this.
+                    <input type="text" placeholder="Add a comment...">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function filterFeed(type) {
+        const tabs = document.querySelectorAll('.tab-item');
+        tabs.forEach(tab => tab.classList.remove('active'));
+        document.querySelector(`.tab-item[onclick="filterFeed('${type}')"]`).classList.add('active');
+        console.log(`Filtering feed by: ${type}`);
+    }
+
+    function likePost() {
+        alert('Post liked!');
+    }
+
+    function commentPost() {
+        alert('Open comment section!');
+    }
+
+    function sharePost() {
+        alert('Post shared!');
+    }
+</script>
+
+</body>
+</html>
